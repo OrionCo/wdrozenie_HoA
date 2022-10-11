@@ -1,0 +1,18 @@
+.dialog {
+  &__top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+
+    .dialog__heading {
+      margin: 0;
+      font-weight: 500;
+    }
+  }
+
+  &__heading {
+    margin-bottom: 5px;
+    font-weight: 400;
+  }
+}
