@@ -1,1 +1,15 @@
 /* You can add global styles to this file, and also import other style files */
+
+@font-face {
+  font-family: "Montserrat", sans-serif;
+  src: url("assets/fonts/Montserrat-VariableFont_wght.ttf") format("truetype");
+}
+
+html,
+body {
+  height: 100%;
+}
+body {
+  margin: 0;
+  font-family: "Montserrat", "Helvetica Neue", sans-serif !important;
+}
