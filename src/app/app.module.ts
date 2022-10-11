@@ -11,18 +11,39 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatDialogModule } from '@angular/material/dialog';
 import { AuthorDialogComponent } from './_dumb-components/author-dialog/author-dialog.component';
+import { RecipeListComponent } from './_smart-components/recipe-list/recipe-list.component';
+import { RecipeTileComponent } from './_dumb-components/recipe-tile/recipe-tile.component';
+import { MatInputModule } from '@angular/material/input';
+import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
+import { ApiInterceptor } from './interceptors/api.interceptor';
 
 @NgModule({
-  declarations: [AppComponent, NavComponent, AuthorDialogComponent],
+  declarations: [
+    AppComponent,
+    NavComponent,
+    AuthorDialogComponent,
+    RecipeListComponent,
+    RecipeTileComponent,
+  ],
   imports: [
     BrowserModule,
+    HttpClientModule,
     RouterOutlet,
     BrowserAnimationsModule,
     MatButtonModule,
     MatIconModule,
     MatDialogModule,
+    MatInputModule,
   ],
-  providers: [APP_SERVICES, APP_INTERCEPTORS],
+  providers: [
+    APP_SERVICES,
+    APP_INTERCEPTORS,
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: ApiInterceptor,
+      multi: true,
+    },
+  ],
   bootstrap: [AppComponent],
 })
 export class AppModule {}

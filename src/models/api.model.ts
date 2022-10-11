@@ -1,5 +1,5 @@
 export namespace apiModel {
-  interface recipe {
+  export interface recipe {
     _id: string;
     name: string;
     preparationTimeInMinutes: number;
@@ -7,7 +7,7 @@ export namespace apiModel {
     ingredients: ingredients[];
   }
 
-  interface ingredients {
+  export interface ingredients {
     _id: string;
     name: string;
     quantity: string;
