@@ -1,5 +1,7 @@
-<div class="recipe">
+<div class="recipe" (click)="selectRecipe()">
   <h3 class="recipe__name">{{ recipe.name }}</h3>
-  <p class="recipe__info">{{ recipe.preparationTimeInMinutes }}</p>
-  <p class="recipe__info">{{ recipe.description }}</p>
+  <div class="recipe__buttons">
+    <button mat-raised-button color="primary">Edit</button>
+    <button mat-raised-button color="primary">Delete</button>
+  </div>
 </div>

@@ -10,4 +10,8 @@ export class RecipeService {
   getRecipes(): Observable<apiModel.recipe[]> {
     return this._http.get<apiModel.recipe[]>('recipe');
   }
+
+  fetchRecipe(recipeId: string): Observable<apiModel.recipe> {
+    return this._http.get<apiModel.recipe>(`recipe/${recipeId}`);
+  }
 }

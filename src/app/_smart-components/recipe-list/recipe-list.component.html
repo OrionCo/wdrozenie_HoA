@@ -13,6 +13,7 @@
     <app-recipe-tile
       *ngFor="let recipe of filteredRecipes"
       [recipe]="recipe"
+      (recipeSelected)="fetchRecipe($event)"
     ></app-recipe-tile>
   </div>
 </aside>

@@ -19,14 +19,14 @@ export class RecipeListComponent implements OnInit {
       ingredients: [],
     },
     {
-      _id: '1',
+      _id: '2',
       name: 'recipe2',
       preparationTimeInMinutes: 2,
       description: 'desc',
       ingredients: [],
     },
     {
-      _id: '1',
+      _id: '3',
       name: 'recipe3',
       preparationTimeInMinutes: 2,
       description: 'desc',
@@ -34,6 +34,7 @@ export class RecipeListComponent implements OnInit {
     },
   ];
   filteredRecipes?: apiModel.recipe[];
+  selectedRecipe$?: Observable<apiModel.recipe>;
 
   constructor(private _recipeService: RecipeService) {}
 
@@ -48,6 +49,7 @@ export class RecipeListComponent implements OnInit {
     // );
     if (!value) {
       // this._getRecipes();
+      this.filteredRecipes = this.recipes;
     } else {
       value = value.toLowerCase();
       this.filteredRecipes = this.recipes!.filter((recipe) =>
@@ -63,5 +65,10 @@ export class RecipeListComponent implements OnInit {
         this.recipes = recipes;
       },
     });
+  }
+
+  fetchRecipe(recipeId: string): void {
+    console.log('event invoked - recipeId: ', recipeId);
+    this.selectedRecipe$ = this._recipeService.fetchRecipe(recipeId);
   }
 }
