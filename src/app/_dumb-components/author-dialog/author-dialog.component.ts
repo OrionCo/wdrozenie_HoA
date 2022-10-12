@@ -1,4 +1,9 @@
-import { Component, Inject, OnInit } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  Inject,
+  OnInit,
+} from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { dialogModel } from '../../../models/dialog.model';
 
@@ -6,6 +11,7 @@ import { dialogModel } from '../../../models/dialog.model';
   selector: 'app-author-dialog',
   templateUrl: './author-dialog.component.html',
   styleUrls: ['./author-dialog.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AuthorDialogComponent implements OnInit {
   constructor(
