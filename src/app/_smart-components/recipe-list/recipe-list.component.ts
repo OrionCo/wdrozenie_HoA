@@ -1,74 +1,66 @@
-import { Component, OnInit } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
+  Component,
+  OnDestroy,
+  OnInit,
+} from '@angular/core';
 import { apiModel } from '../../../models/api.model';
-import { filter, first, map, Observable } from 'rxjs';
+import { filter, finalize, first, map, Observable, Subject } from 'rxjs';
 import { RecipeService } from '../../services/recipe.service';
 
 @Component({
   selector: 'app-recipe-list',
   templateUrl: './recipe-list.component.html',
   styleUrls: ['./recipe-list.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class RecipeListComponent implements OnInit {
+export class RecipeListComponent implements OnInit, OnDestroy {
   recipes$?: Observable<apiModel.recipe[]>;
-  recipes?: apiModel.recipe[] = [
-    {
-      _id: '1',
-      name: 'recipe1',
-      preparationTimeInMinutes: 2,
-      description: 'desc',
-      ingredients: [],
-    },
-    {
-      _id: '2',
-      name: 'recipe2',
-      preparationTimeInMinutes: 2,
-      description: 'desc',
-      ingredients: [],
-    },
-    {
-      _id: '3',
-      name: 'recipe3',
-      preparationTimeInMinutes: 2,
-      description: 'desc',
-      ingredients: [],
-    },
-  ];
-  filteredRecipes?: apiModel.recipe[];
-  selectedRecipe$?: Observable<apiModel.recipe>;
+  filteredRecipes$?: Observable<apiModel.recipe[]>;
+  selectedRecipe$?: Observable<apiModel.recipe | null>;
+  destroy$!: Subject<boolean>;
 
-  constructor(private _recipeService: RecipeService) {}
+  constructor(
+    private _recipeService: RecipeService,
+    private _cdr: ChangeDetectorRef
+  ) {}
 
   ngOnInit(): void {
-    // this._getRecipes();
-    this.filteredRecipes = this.recipes;
+    this._getRecipes();
+  }
+
+  ngOnDestroy(): void {
+    this.destroy$.next(true);
+    this.destroy$.complete();
   }
 
   filterRecipes(value: string): void {
-    // this.recipes = this.recipes!.pipe(
-    //   map((recipes) => recipes.filter((recipe) => recipe.name == value))
-    // );
     if (!value) {
-      // this._getRecipes();
-      this.filteredRecipes = this.recipes;
+      this.filteredRecipes$ = this.recipes$;
     } else {
       value = value.toLowerCase();
-      this.filteredRecipes = this.recipes!.filter((recipe) =>
-        recipe.name.includes(value)
+      this.filteredRecipes$ = this.recipes$!.pipe(
+        map((recipes) =>
+          recipes.filter((recipe) => recipe.name?.includes(value))
+        )
       );
     }
   }
 
   private _getRecipes(): void {
-    this.recipes$ = this._recipeService.getRecipes();
-    this.recipes$?.pipe(first()).subscribe({
-      next: (recipes) => {
-        this.recipes = recipes;
-      },
-    });
+    this._recipeService.getRecipes();
+    this.recipes$ = this._recipeService.recipes$;
+    this.filteredRecipes$ = this._recipeService.recipes$;
+    this._cdr.detectChanges();
   }
 
   fetchRecipe(recipeId: string): void {
-    console.log('event invoked - recipeId: ', recipeId);
-    this.selectedRecipe$ = this._recipeService.fetchRecipe(recipeId);
+    this._recipeService.fetchRecipe(recipeId);
+    this.selectedRecipe$ = this._recipeService.selectedRecipe$;
+  }
+
+  deleteRecipe(recipeId: string): void {
+    this._recipeService.deleteRecipe(recipeId);
   }
 }

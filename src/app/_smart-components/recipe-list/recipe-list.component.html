@@ -1,19 +1,23 @@
 <aside class="recipes">
-  <mat-form-field>
-    <mat-label>Search recipes...</mat-label>
-    <input
-      matInput
-      placeholder="Search recipes..."
-      type="text"
-      (input)="filterRecipes(recipeName.value)"
-      #recipeName
-    />
-  </mat-form-field>
+  <div class="recipes__top">
+    <mat-form-field>
+      <mat-label>Search recipes...</mat-label>
+      <input
+        matInput
+        placeholder="Search recipes..."
+        type="text"
+        (input)="filterRecipes(recipeName.value)"
+        #recipeName
+      />
+    </mat-form-field>
+    <a routerLink="create" mat-raised-button>Create</a>
+  </div>
   <div class="recipes__list">
     <app-recipe-tile
-      *ngFor="let recipe of filteredRecipes"
+      *ngFor="let recipe of filteredRecipes$ | async"
       [recipe]="recipe"
       (recipeSelected)="fetchRecipe($event)"
+      (recipeDeleted)="deleteRecipe($event)"
     ></app-recipe-tile>
   </div>
 </aside>

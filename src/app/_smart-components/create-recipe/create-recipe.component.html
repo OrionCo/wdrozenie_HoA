@@ -1,0 +1,40 @@
+<form class="form" (ngSubmit)="createRecipe()" [formGroup]="form">
+  <mat-form-field>
+    <mat-label>Name</mat-label>
+    <input type="text" matInput formControlName="name" />
+  </mat-form-field>
+  <mat-form-field>
+    <mat-label>Preparation time (minutes)</mat-label>
+    <input type="number" matInput formControlName="preparationTimeInMinutes" />
+  </mat-form-field>
+  <mat-form-field>
+    <mat-label>Description</mat-label>
+    <input type="text" matInput formControlName="description" />
+  </mat-form-field>
+  <ng-container
+    formArrayName="ingredients"
+    *ngFor="
+      let ingredient of getFormArray('ingredients').controls;
+      let i = index
+    "
+  >
+    <ng-container [formGroupName]="i">
+      <h4>New ingredient:</h4>
+      <mat-form-field>
+        <mat-label>Name</mat-label>
+        <input type="text" matInput formControlName="name" />
+      </mat-form-field>
+      <mat-form-field>
+        <mat-label>Quantity</mat-label>
+        <input type="text" matInput formControlName="quantity" />
+      </mat-form-field>
+      <button type="button" (click)="removeIngredient(i)" mat-raised-button>
+        <mat-icon>remove</mat-icon>Remove ingredient
+      </button>
+    </ng-container>
+  </ng-container>
+  <button type="button" (click)="addIngredient()" mat-raised-button>
+    <mat-icon>add</mat-icon>Add ingredient
+  </button>
+  <button type="submit" mat-raised-button color="primary">Create recipe</button>
+</form>

@@ -9,6 +9,7 @@ import { apiModel } from '../../../models/api.model';
 export class RecipeTileComponent implements OnInit {
   @Input() recipe!: apiModel.recipe;
   @Output() recipeSelected: EventEmitter<string> = new EventEmitter<string>();
+  @Output() recipeDeleted: EventEmitter<string> = new EventEmitter<string>();
 
   constructor() {}
 
@@ -16,5 +17,10 @@ export class RecipeTileComponent implements OnInit {
 
   selectRecipe(): void {
     this.recipeSelected.emit(this.recipe._id);
+  }
+
+  deleteRecipe(event: Event): void {
+    this.recipeDeleted.emit(this.recipe._id);
+    event.stopPropagation();
   }
 }
