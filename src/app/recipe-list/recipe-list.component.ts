@@ -1,8 +1,8 @@
 import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
-import { apiModel } from '../../models/api.model';
 import { finalize, first, map, Observable, tap } from 'rxjs';
 import { RecipeService } from '../services/recipe.service';
 import { ActivatedRoute, Router } from '@angular/router';
+import { Recipe } from 'src/models/api.model';
 
 @Component({
   selector: 'app-recipe-list',
@@ -11,7 +11,7 @@ import { ActivatedRoute, Router } from '@angular/router';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class RecipeListComponent implements OnInit {
-  recipes$?: Observable<apiModel.recipe[]> = this._recipeService.recipes$;
+  recipes$?: Observable<Recipe[]> = this._recipeService.recipes$;
 
   constructor(private _recipeService: RecipeService, private _router: Router) {}
 

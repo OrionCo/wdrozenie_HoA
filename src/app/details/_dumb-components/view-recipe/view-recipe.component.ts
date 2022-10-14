@@ -1,12 +1,4 @@
-import {
-  ChangeDetectionStrategy,
-  ChangeDetectorRef,
-  Component,
-  OnDestroy,
-  OnInit,
-} from '@angular/core';
-import { Observable, Subject, takeUntil } from 'rxjs';
-import { apiModel } from '../../../../models/api.model';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { RecipeService } from '../../../services/recipe.service';
 import { ActivatedRoute } from '@angular/router';
 import { AbstractRecipeComponent } from 'src/app/shared/abstract-recipe.component';

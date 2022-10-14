@@ -1,16 +1,15 @@
 import { Directive, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Observable, of, Subject, switchMap, takeUntil } from 'rxjs';
-import { apiModel } from 'src/models/api.model';
+import { Recipe } from 'src/models/api.model';
 import { RecipeService } from '../services/recipe.service';
 
 @Directive()
 export abstract class AbstractRecipeComponent implements OnInit, OnDestroy {
   recipeId?: string;
   destroy$: Subject<boolean> = new Subject();
-  recipeData$?: Observable<apiModel.recipe | null> =
-    this._recipeService.selectedRecipe$;
-  recipeData?: apiModel.recipe | null;
+  recipeData$?: Observable<Recipe | null> = this._recipeService.selectedRecipe$;
+  recipeData?: Recipe | null;
   editMode: boolean = false;
 
   constructor(
@@ -29,7 +28,7 @@ export abstract class AbstractRecipeComponent implements OnInit, OnDestroy {
             return this._recipeService.fetchRecipe(params['id']);
           } else {
             this.editMode = false;
-            return of();
+            return of(null);
           }
         })
       )

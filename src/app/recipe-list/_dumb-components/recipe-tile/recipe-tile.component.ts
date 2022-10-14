@@ -6,8 +6,8 @@ import {
   OnInit,
   Output,
 } from '@angular/core';
-import { apiModel } from '../../../../models/api.model';
 import { Router } from '@angular/router';
+import { Recipe } from 'src/models/api.model';
 
 @Component({
   selector: 'app-recipe-tile',
@@ -16,7 +16,7 @@ import { Router } from '@angular/router';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class RecipeTileComponent implements OnInit {
-  @Input() recipe!: apiModel.recipe;
+  @Input() recipe!: Recipe;
   @Output() recipeSelected: EventEmitter<string> = new EventEmitter<string>();
   @Output() recipeDeleted: EventEmitter<string> = new EventEmitter<string>();
 

@@ -83,6 +83,7 @@
       type="submit"
       mat-raised-button
       color="primary"
+      [disabled]="form.invalid"
     >
       <mat-icon>{{ editMode ? 'check_box' : 'add_box' }}</mat-icon> {{ editMode ? 'Save changes' : 'Create recipe' }}
     </button>

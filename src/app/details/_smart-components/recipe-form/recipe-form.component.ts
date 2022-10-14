@@ -2,15 +2,13 @@ import {
   ChangeDetectionStrategy,
   ChangeDetectorRef,
   Component,
-  OnDestroy,
-  OnInit,
 } from '@angular/core';
 import { RecipeService } from '../../../services/recipe.service';
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { apiModel } from '../../../../models/api.model';
-import { filter, finalize, first, takeUntil } from 'rxjs';
+import { finalize, first, takeUntil } from 'rxjs';
 import { AbstractRecipeComponent } from 'src/app/shared/abstract-recipe.component';
+import { Recipe } from 'src/models/api.model';
 
 @Component({
   selector: 'app-recipe-form',
@@ -43,7 +41,7 @@ export class RecipeFormComponent extends AbstractRecipeComponent {
   onSubmit(): void {
     if (this.form.valid) {
       const formData = this.form.getRawValue();
-      if (this.recipeData?._id) {
+      if (this.editMode && this.recipeData) {
         this._recipeService
           .updateRecipe(formData, this.recipeData._id)
           .pipe(
@@ -67,9 +65,8 @@ export class RecipeFormComponent extends AbstractRecipeComponent {
             )
           )
           .subscribe({
-            next: () => {
-              this._initForm();
-              this._cdr.detectChanges();
+            next: (res: Recipe) => {
+              this._router.navigate([`recipe/${res?._id}`]);
             },
           });
       }
