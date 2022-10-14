@@ -1,12 +1,30 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule, Routes } from '@angular/router';
-import { CreateRecipeComponent } from './_smart-components/create-recipe/create-recipe.component';
+import { RecipeFormComponent } from './details/_smart-components/recipe-form/recipe-form.component';
+import { DetailsComponent } from './details/details.component';
+import { ViewRecipeComponent } from './details/_dumb-components/view-recipe/view-recipe.component';
 
 const routes: Routes = [
   {
-    path: 'create',
-    component: CreateRecipeComponent,
+    path: '',
+    component: DetailsComponent,
+    children: [
+      {
+        path: 'create',
+        component: RecipeFormComponent,
+      },
+      {
+        path: 'recipe/:id',
+        component: ViewRecipeComponent,
+        pathMatch: 'prefix',
+      },
+      {
+        path: 'recipe/edit/:id',
+        component: RecipeFormComponent,
+        pathMatch: 'prefix',
+      },
+    ],
   },
 ];
 

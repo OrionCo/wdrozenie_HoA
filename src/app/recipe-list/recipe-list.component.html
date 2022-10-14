@@ -1,0 +1,30 @@
+<aside class="recipes">
+  <div class="recipes__top">
+    <mat-form-field class="recipes__search">
+      <mat-label class="label-with-icon">
+        <mat-icon>search</mat-icon> Search recipes...
+      </mat-label>
+      <input
+        matInput
+        placeholder="Search recipes..."
+        type="text"
+        (input)="filterRecipes(recipeName.value)"
+        #recipeName
+      />
+    </mat-form-field>
+    <a
+      routerLink="create"
+      mat-raised-button
+    >
+      <mat-icon>add_box</mat-icon>Create
+    </a>
+  </div>
+  <div class="recipes__list">
+    <app-recipe-tile
+      *ngFor="let recipe of recipes$ | async"
+      [recipe]="recipe"
+      (recipeSelected)="fetchRecipe($event)"
+      (recipeDeleted)="deleteRecipe($event)"
+    ></app-recipe-tile>
+  </div>
+</aside>

@@ -2,7 +2,7 @@
 // `ng build` replaces `environment.ts` with `environment.prod.ts`.
 // The list of file replacements can be found in `angular.json`.
 
-const crudID: string = '6d473bb81f9e4cc5a5a2cca73ea60072';
+const crudID: string = '06271c94c10d40169a96a5f153f17381';
 
 export const environment = {
   production: false,

@@ -1,0 +1,16 @@
+<nav class="navbar">
+  <mat-toolbar color="primary">
+    <div class="navbar__wrapper">
+      <h1 class="navbar__title" routerLink="/">{{ appTitle }}</h1>
+      <button
+        class="navbar__button"
+        mat-icon-button
+        color="accent"
+        (click)="openDialog()"
+      >
+        Click me!
+        <mat-icon>favorite</mat-icon>
+      </button>
+    </div>
+  </mat-toolbar>
+</nav>

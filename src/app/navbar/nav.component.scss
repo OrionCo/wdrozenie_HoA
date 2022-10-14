@@ -1,0 +1,21 @@
+@import "consts";
+
+.navbar {
+  &__button {
+    width: min-content;
+  }
+
+  &__wrapper {
+    max-width: calc(1440px - 2 * 50px);
+    margin: 0 auto;
+    width: 100%;
+    display: flex;
+    padding: 0 50px;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  &__title {
+    font-weight: 500;
+  }
+}

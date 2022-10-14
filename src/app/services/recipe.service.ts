@@ -16,43 +16,36 @@ export class RecipeService {
 
   constructor(private _http: HttpClient) {}
 
-  createRecipe(data: apiModel.recipe): void {
-    this._http
-      .post<apiModel.recipe>('recipe', data)
-      .pipe(
-        first(),
-        finalize(() => this.getRecipes())
-      )
-      .subscribe();
+  createRecipe(data: apiModel.recipe): Observable<apiModel.recipe> {
+    return this._http.post<apiModel.recipe>('recipe', data).pipe(first());
   }
 
-  getRecipes(): void {
-    this._http
+  updateRecipe(
+    data: apiModel.recipe,
+    recipeId: string
+  ): Observable<apiModel.recipe> {
+    return this._http.put<apiModel.recipe>(`recipe/${recipeId}`, data);
+  }
+
+  getRecipes(): Observable<apiModel.recipe[]> {
+    return this._http
       .get<apiModel.recipe[]>('recipe')
-      .pipe(first())
-      .subscribe({
-        next: (recipes: apiModel.recipe[]) =>
-          this.recipesSubject$.next(recipes),
-      });
-  }
-
-  fetchRecipe(recipeId: string): void {
-    this._http
-      .get<apiModel.recipe>(`recipe/${recipeId}`)
-      .pipe(first())
-      .subscribe({
-        next: (recipe: apiModel.recipe) =>
-          this.selectedRecipeSubject$.next(recipe),
-      });
-  }
-
-  deleteRecipe(recipeId: string): void {
-    this._http
-      .delete<apiModel.recipe>(`recipe/${recipeId}`)
       .pipe(
-        first(),
-        finalize(() => this.getRecipes())
-      )
-      .subscribe();
+        tap((recipes: apiModel.recipe[]) => this.recipesSubject$.next(recipes))
+      );
+  }
+
+  fetchRecipe(recipeId: string): Observable<apiModel.recipe> {
+    return this._http
+      .get<apiModel.recipe>(`recipe/${recipeId}`)
+      .pipe(
+        tap((recipe: apiModel.recipe) =>
+          this.selectedRecipeSubject$.next(recipe)
+        )
+      );
+  }
+
+  deleteRecipe(recipeId: string): Observable<apiModel.recipe> {
+    return this._http.delete<apiModel.recipe>(`recipe/${recipeId}`);
   }
 }

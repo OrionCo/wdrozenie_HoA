@@ -1,0 +1,26 @@
+@import "consts";
+
+.recipe {
+  border: 1px solid map-get($colors, border);
+  border-radius: 15px;
+  padding: 10px 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  cursor: pointer;
+  background-color: map-get($colors, white);
+  transition: background-color 0.1s ease;
+
+  &:hover {
+    background-color: map-get($colors, hover);
+  }
+
+  &__buttons {
+    display: flex;
+    gap: 10px;
+  }
+
+  &__name {
+    font-weight: 400;
+  }
+}
