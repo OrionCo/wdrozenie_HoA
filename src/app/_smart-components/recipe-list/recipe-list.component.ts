@@ -5,8 +5,8 @@ import {
   OnDestroy,
   OnInit,
 } from '@angular/core';
-import { apiModel } from '../../../models/api.model';
-import { filter, finalize, first, map, Observable, Subject } from 'rxjs';
+import { map, Observable, Subject } from 'rxjs';
+import { recipe } from 'src/models/api.model';
 import { RecipeService } from '../../services/recipe.service';
 
 @Component({
@@ -16,9 +16,9 @@ import { RecipeService } from '../../services/recipe.service';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class RecipeListComponent implements OnInit, OnDestroy {
-  recipes$?: Observable<apiModel.recipe[]>;
-  filteredRecipes$?: Observable<apiModel.recipe[]>;
-  selectedRecipe$?: Observable<apiModel.recipe | null>;
+  recipes$?: Observable<recipe[]>;
+  filteredRecipes$?: Observable<recipe[]>;
+  selectedRecipe$?: Observable<recipe | null>;
   destroy$!: Subject<boolean>;
 
   constructor(
