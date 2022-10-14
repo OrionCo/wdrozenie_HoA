@@ -1,8 +1,12 @@
+@import "consts";
+
 .navbar {
   width: 100%;
   padding: 20px 0;
   position: sticky;
   top: 0;
+  background-color: map-get($colors, white);
+  z-index: 99;
 
   &__wrapper {
     max-width: calc(1440px - 2 * 50px);

@@ -1,15 +1,13 @@
-export namespace apiModel {
-  interface recipe {
-    _id: string;
-    name: string;
-    preparationTimeInMinutes: number;
-    description: string;
-    ingredients: ingredients[];
-  }
+export interface recipe {
+  _id: string;
+  name: string;
+  preparationTimeInMinutes: number;
+  description: string;
+  ingredients: ingredient[];
+}
 
-  interface ingredients {
-    _id: string;
-    name: string;
-    quantity: string;
-  }
+export interface ingredient {
+  _id: string;
+  name: string;
+  quantity: string;
 }
