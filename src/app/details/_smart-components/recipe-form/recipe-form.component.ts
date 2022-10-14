@@ -2,6 +2,7 @@ import {
   ChangeDetectionStrategy,
   ChangeDetectorRef,
   Component,
+  OnInit,
 } from '@angular/core';
 import { RecipeService } from '../../../services/recipe.service';
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
@@ -16,7 +17,10 @@ import { Recipe } from 'src/models/api.model';
   styleUrls: ['./recipe-form.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class RecipeFormComponent extends AbstractRecipeComponent {
+export class RecipeFormComponent
+  extends AbstractRecipeComponent
+  implements OnInit
+{
   form!: FormGroup;
 
   constructor(

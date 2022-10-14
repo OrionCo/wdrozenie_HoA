@@ -13,13 +13,11 @@ import { dialogModel } from '../../../../models/dialog.model';
   styleUrls: ['./author-dialog.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class AuthorDialogComponent implements OnInit {
+export class AuthorDialogComponent {
   constructor(
     private dialogRef: MatDialogRef<AuthorDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public data: dialogModel.dialogData
   ) {}
-
-  ngOnInit(): void {}
 
   close(): void {
     this.dialogRef.close();

@@ -15,14 +15,12 @@ import { Recipe } from 'src/models/api.model';
   styleUrls: ['./recipe-tile.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class RecipeTileComponent implements OnInit {
+export class RecipeTileComponent {
   @Input() recipe!: Recipe;
   @Output() recipeSelected: EventEmitter<string> = new EventEmitter<string>();
   @Output() recipeDeleted: EventEmitter<string> = new EventEmitter<string>();
 
   constructor(private _router: Router) {}
-
-  ngOnInit(): void {}
 
   selectRecipe(): void {
     this.recipeSelected.emit(this.recipe._id);

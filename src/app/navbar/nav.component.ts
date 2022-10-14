@@ -14,7 +14,7 @@ import { AuthorDialogComponent } from './_dumb-components/author-dialog/author-d
   styleUrls: ['./nav.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class NavComponent implements OnInit {
+export class NavComponent {
   @Input() appTitle!: string;
 
   author: dialogModel.dialogData = {
@@ -25,8 +25,6 @@ export class NavComponent implements OnInit {
   };
 
   constructor(public dialog: MatDialog) {}
-
-  ngOnInit(): void {}
 
   openDialog(): void {
     this.dialog.open(AuthorDialogComponent, {
