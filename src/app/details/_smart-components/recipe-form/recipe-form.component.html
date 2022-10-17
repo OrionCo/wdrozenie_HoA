@@ -1,0 +1,91 @@
+<app-header [title]="!editMode ? 'Create new recipe' : 'Edit recipe'">
+  <mat-icon>{{ !editMode ? "add_box" : "edit" }}</mat-icon>
+</app-header>
+<form
+  class="form"
+  (ngSubmit)="onSubmit()"
+  [formGroup]="form"
+>
+  <mat-form-field>
+    <mat-label>Name</mat-label>
+    <input
+      type="text"
+      matInput
+      formControlName="name"
+    />
+  </mat-form-field>
+  <mat-form-field>
+    <mat-label>Preparation time (minutes)</mat-label>
+    <input
+      type="number"
+      matInput
+      formControlName="preparationTimeInMinutes"
+    />
+  </mat-form-field>
+  <mat-form-field>
+    <mat-label>Description</mat-label>
+    <input
+      type="text"
+      matInput
+      formControlName="description"
+    />
+  </mat-form-field>
+  <div
+    class="ingredients"
+    formArrayName="ingredients"
+    *ngFor="
+      let ingredient of getFormArray('ingredients').controls;
+      let i = index
+    "
+  >
+    <div
+      class="ingredients__item"
+      [formGroupName]="i"
+    >
+      <h4>New ingredient:</h4>
+      <mat-form-field>
+        <mat-label>Name</mat-label>
+        <input
+          type="text"
+          matInput
+          formControlName="name"
+        />
+      </mat-form-field>
+      <mat-form-field>
+        <mat-label>Quantity</mat-label>
+        <input
+          type="text"
+          matInput
+          formControlName="quantity"
+        />
+      </mat-form-field>
+      <button
+        class="btn"
+        type="button"
+        (click)="removeIngredient(i)"
+        mat-raised-button
+      >
+        <mat-icon>remove</mat-icon>Remove ingredient
+      </button>
+    </div>
+  </div>
+  <div class="form__bottom">
+    <button
+      class="btn"
+      type="button"
+      (click)="addIngredient()"
+      mat-raised-button
+    >
+      <mat-icon>library_add</mat-icon>Add ingredient
+    </button>
+    <button
+      class="btn"
+      type="submit"
+      mat-raised-button
+      color="primary"
+      [disabled]="form.invalid"
+    >
+      <mat-icon>{{ editMode ? 'check_box' : 'add_box' }}</mat-icon> {{ editMode ? 'Save changes' : 'Create recipe' }}
+    </button>
+  </div>
+</form>

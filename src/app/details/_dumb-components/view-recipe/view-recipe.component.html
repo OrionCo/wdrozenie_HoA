@@ -1,0 +1,15 @@
+<ng-container *ngIf="recipeData$ | async as recipe">
+  <app-header [title]="recipe.name">
+    <mat-icon>notes</mat-icon>
+  </app-header>
+  <h2>Preparation time: {{ recipe.preparationTimeInMinutes }}</h2>
+  <h4>Description:</h4>
+  <p>{{ recipe.description }}</p>
+  <ng-container *ngIf="recipe.ingredients.length">
+    <h4>Ingredients:</h4>
+    <div class="ingredient" *ngFor="let ingredient of recipe.ingredients">
+      <p>{{ ingredient.name }}</p>
+      <p>Quantity: {{ ingredient.quantity }}</p>
+    </div>
+  </ng-container>
+</ng-container>

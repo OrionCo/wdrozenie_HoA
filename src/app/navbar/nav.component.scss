@@ -1,8 +1,9 @@
+@import "consts";
+
 .navbar {
-  width: 100%;
-  padding: 20px 0;
-  position: sticky;
-  top: 0;
+  &__button {
+    width: min-content;
+  }
 
   &__wrapper {
     max-width: calc(1440px - 2 * 50px);

@@ -5,8 +5,8 @@ import {
   OnInit,
 } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-import { dialogModel } from '../../../models/dialog.model';
-import { AuthorDialogComponent } from '../../_dumb-components/author-dialog/author-dialog.component';
+import { dialogModel } from '../../models/dialog.model';
+import { AuthorDialogComponent } from './_dumb-components/author-dialog/author-dialog.component';
 
 @Component({
   selector: 'app-nav',
@@ -14,7 +14,7 @@ import { AuthorDialogComponent } from '../../_dumb-components/author-dialog/auth
   styleUrls: ['./nav.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class NavComponent implements OnInit {
+export class NavComponent {
   @Input() appTitle!: string;
 
   author: dialogModel.dialogData = {
@@ -25,8 +25,6 @@ export class NavComponent implements OnInit {
   };
 
   constructor(public dialog: MatDialog) {}
-
-  ngOnInit(): void {}
 
   openDialog(): void {
     this.dialog.open(AuthorDialogComponent, {

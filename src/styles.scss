@@ -23,3 +23,22 @@ body {
   margin: 0;
   font-family: "Montserrat", "Helvetica Neue", sans-serif !important;
 }
+
+.label-with-icon {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.mat-button-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+}
+
+.icon--small {
+  font-size: 18px;
+  width: 18px !important;
+  height: 18px !important;
+}

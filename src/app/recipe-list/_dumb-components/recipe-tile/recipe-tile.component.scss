@@ -8,6 +8,7 @@
   justify-content: space-between;
   align-items: center;
   cursor: pointer;
+  background-color: map-get($colors, white);
   transition: background-color 0.1s ease;
 
   &:hover {
