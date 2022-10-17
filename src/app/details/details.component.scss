@@ -1,0 +1,11 @@
+@import "consts";
+
+:host {
+  width: 100%;
+}
+
+.details {
+  background-color: map-get($colors, bg-light);
+  padding: 30px;
+  border-radius: 15px;
+}

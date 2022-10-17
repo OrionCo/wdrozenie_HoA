@@ -1,0 +1,12 @@
+<div class="recipe" (click)="selectRecipe()">
+  <h3 class="recipe__name">{{ recipe.name }}</h3>
+  <div class="recipe__buttons">
+    <button mat-raised-button color="primary" (click)="editRecipe($event)">
+      <mat-icon class="icon--small">edit</mat-icon>
+      Edit
+    </button>
+    <button mat-raised-button color="primary" (click)="deleteRecipe($event)">
+      <mat-icon class="icon--small">delete</mat-icon> Delete
+    </button>
+  </div>
+</div>

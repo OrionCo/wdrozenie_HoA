@@ -1,57 +1,43 @@
 import { Injectable } from '@angular/core';
 
 import { HttpClient } from '@angular/common/http';
-import { BehaviorSubject, finalize, first, Observable, tap } from 'rxjs';
-import { recipe } from 'src/models/api.model';
+import { BehaviorSubject, first, Observable, tap } from 'rxjs';
+import { Recipe } from 'src/models/api.model';
 
 @Injectable()
 export class RecipeService {
-  recipesSubject$: BehaviorSubject<recipe[]> = new BehaviorSubject<recipe[]>(
+  recipesSubject$: BehaviorSubject<Recipe[]> = new BehaviorSubject<Recipe[]>(
     []
   );
-  recipes$: Observable<recipe[]> = this.recipesSubject$.asObservable();
-  selectedRecipeSubject$: BehaviorSubject<recipe | null> =
-    new BehaviorSubject<recipe | null>(null);
-  selectedRecipe$: Observable<recipe | null> =
+  recipes$: Observable<Recipe[]> = this.recipesSubject$.asObservable();
+  selectedRecipeSubject$: BehaviorSubject<Recipe | null> =
+    new BehaviorSubject<Recipe | null>(null);
+  selectedRecipe$: Observable<Recipe | null> =
     this.selectedRecipeSubject$.asObservable();
 
   constructor(private _http: HttpClient) {}
 
-  createRecipe(data: recipe): void {
-    this._http
-      .post<recipe>('recipe', data)
-      .pipe(
-        first(),
-        finalize(() => this.getRecipes())
-      )
-      .subscribe();
+  createRecipe(data: Recipe): Observable<Recipe> {
+    return this._http.post<Recipe>('recipe', data).pipe(first());
   }
 
-  getRecipes(): void {
-    this._http
-      .get<recipe[]>('recipe')
-      .pipe(first())
-      .subscribe({
-        next: (recipes: recipe[]) => this.recipesSubject$.next(recipes),
-      });
+  updateRecipe(data: Recipe, recipeId: string): Observable<Recipe> {
+    return this._http.put<Recipe>(`recipe/${recipeId}`, data);
   }
 
-  fetchRecipe(recipeId: string): void {
-    this._http
-      .get<recipe>(`recipe/${recipeId}`)
-      .pipe(first())
-      .subscribe({
-        next: (recipe: recipe) => this.selectedRecipeSubject$.next(recipe),
-      });
+  getRecipes(): Observable<Recipe[]> {
+    return this._http
+      .get<Recipe[]>('recipe')
+      .pipe(tap((recipes: Recipe[]) => this.recipesSubject$.next(recipes)));
   }
 
-  deleteRecipe(recipeId: string): void {
-    this._http
-      .delete<recipe>(`recipe/${recipeId}`)
-      .pipe(
-        first(),
-        finalize(() => this.getRecipes())
-      )
-      .subscribe();
+  fetchRecipe(recipeId: string): Observable<Recipe> {
+    return this._http
+      .get<Recipe>(`recipe/${recipeId}`)
+      .pipe(tap((recipe: Recipe) => this.selectedRecipeSubject$.next(recipe)));
+  }
+
+  deleteRecipe(recipeId: string): Observable<Recipe> {
+    return this._http.delete<Recipe>(`recipe/${recipeId}`);
   }
 }

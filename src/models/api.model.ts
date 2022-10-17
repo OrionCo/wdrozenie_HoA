@@ -1,12 +1,12 @@
-export interface recipe {
+export interface Recipe {
   _id: string;
   name: string;
   preparationTimeInMinutes: number;
   description: string;
-  ingredients: ingredient[];
+  ingredients: Ingredient[];
 }
 
-export interface ingredient {
+export interface Ingredient {
   _id: string;
   name: string;
   quantity: string;
