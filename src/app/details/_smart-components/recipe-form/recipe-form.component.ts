@@ -4,9 +4,15 @@ import {
   Component,
   OnInit,
 } from '@angular/core';
-import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import {
+  FormArray,
+  FormBuilder,
+  FormControl,
+  FormGroup,
+  Validators,
+} from '@angular/forms';
 import { Router } from '@angular/router';
-import { finalize, first, takeUntil } from 'rxjs';
+import { first, takeUntil } from 'rxjs';
 import { AbstractRecipeComponent } from 'src/app/shared/abstract-recipe.component';
 import { Recipe } from 'src/models/api.model';
 
@@ -21,6 +27,8 @@ export class RecipeFormComponent
   implements OnInit
 {
   form!: FormGroup;
+  maxNameLength: number = 80;
+  maxDescriptionLength: number = 255;
 
   constructor(
     private _fb: FormBuilder,
@@ -32,10 +40,12 @@ export class RecipeFormComponent
 
   override ngOnInit(): void {
     super.ngOnInit();
-    this.recipeData$?.pipe(takeUntil(this.destroy$)).subscribe((recipe) => {
-      this.recipeData = recipe;
-      this._initForm();
-      this._patchForm();
+    this.recipeData$?.pipe(takeUntil(this.destroy$)).subscribe({
+      next: (recipe) => {
+        this.recipeData = recipe;
+        this._initForm();
+        this._patchForm();
+      },
     });
   }
 
@@ -45,29 +55,29 @@ export class RecipeFormComponent
       if (this.editMode && this.recipeData) {
         this._recipeService
           .updateRecipe(formData, this.recipeData._id)
-          .pipe(
-            first(),
-            finalize(() =>
-              this._recipeService.getRecipes().pipe(first()).subscribe()
-            )
-          )
+          .pipe(first())
           .subscribe({
             next: () => {
+              this._snackBar.open('Successfully edited recipe.');
               this._router.navigate([`recipe/${this.recipeData?._id}`]);
+            },
+            error: (err) => {
+              console.warn(err);
+              this._snackBar.open('Failed to edit recipe.', false);
             },
           });
       } else {
         this._recipeService
           .createRecipe(formData)
-          .pipe(
-            first(),
-            finalize(() =>
-              this._recipeService.getRecipes().pipe(first()).subscribe()
-            )
-          )
+          .pipe(first())
           .subscribe({
             next: (res: Recipe) => {
+              this._snackBar.open('Successfully created recipe.');
               this._router.navigate([`recipe/${res?._id}`]);
+            },
+            error: (err) => {
+              console.warn(err);
+              this._snackBar.open('Failed to create recipe.', false);
             },
           });
       }
@@ -77,8 +87,15 @@ export class RecipeFormComponent
   addIngredient(): void {
     this.getFormArray('ingredients').push(
       this._fb.group({
-        name: [null, Validators.required],
-        quantity: [null, Validators.required],
+        name: [
+          null,
+          [
+            Validators.required,
+            Validators.minLength(3),
+            Validators.maxLength(80),
+          ],
+        ],
+        quantity: [null, [Validators.required, Validators.min(1)]],
       })
     );
   }
@@ -98,19 +115,19 @@ export class RecipeFormComponent
         [
           Validators.required,
           Validators.minLength(3),
-          Validators.maxLength(80),
+          Validators.maxLength(this.maxNameLength),
         ],
       ],
       preparationTimeInMinutes: [
         this.editMode ? this.recipeData?.preparationTimeInMinutes : null,
-        [Validators.required, Validators.min(0)],
+        [Validators.required, Validators.min(1)],
       ],
       description: [
         this.editMode ? this.recipeData?.description : null,
         [
           Validators.required,
           Validators.minLength(15),
-          Validators.maxLength(255),
+          Validators.maxLength(this.maxDescriptionLength),
         ],
       ],
       ingredients: new FormArray(
@@ -134,5 +151,15 @@ export class RecipeFormComponent
       });
       this._cdr.detectChanges();
     }
+  }
+
+  getControl(name: string): FormControl {
+    return this.form.get(name) as FormControl;
+  }
+
+  getIngredientControl(position: number, name: string): FormControl {
+    return this.getFormArray('ingredients')
+      .at(position)
+      .get(name) as FormControl;
   }
 }

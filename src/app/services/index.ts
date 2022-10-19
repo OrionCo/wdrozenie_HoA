@@ -1,4 +1,4 @@
 import { RecipeService } from './recipe.service';
-import { HttpClient } from '@angular/common/http';
+import { SnackbarService } from './snackbar.service';
 
-export const APP_SERVICES: any[] = [RecipeService];
+export const APP_SERVICES: any[] = [RecipeService, SnackbarService];

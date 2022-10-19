@@ -1,0 +1,24 @@
+<mat-form-field class="control">
+  <mat-label>{{ label }}</mat-label>
+  <input
+    [type]="type"
+    matInput
+    [formControl]="formControl"
+    [attr.maxLength]="maxLength ? maxLength : null"
+    #input
+  />
+  <mat-hint>{{ hint }}</mat-hint>
+  <mat-hint
+    *ngIf="!!maxLength"
+    align="end"
+  >
+    {{ input.value.length || 0 }}/{{ input.maxLength }}
+  </mat-hint>
+  <mat-error *ngIf="errors">
+    {{ errors | errorPipe }}
+    <span
+      *ngIf="!!maxLength"
+      class="align-right"
+    >{{ input.value.length || 0 }}/{{ input.maxLength }}</span>
+  </mat-error>
+</mat-form-field>

@@ -1,10 +1,13 @@
 <div class="dialog">
   <div class="dialog__top">
     <h1 class="dialog__heading">{{ data.name + " " + data.lastName }}</h1>
-    <button mat-icon-button (click)="close()">
+    <button
+      mat-icon-button
+      (click)="close()"
+    >
       <mat-icon>close</mat-icon>
     </button>
   </div>
-  <h2 class="dialog__heading">Wiek: {{ data.age }}</h2>
+  <h2 class="dialog__heading">Age: {{ data.age }}</h2>
   <h3 class="dialog__heading">{{ data.slogan }}</h3>
 </div>

@@ -6,30 +6,25 @@
   (ngSubmit)="onSubmit()"
   [formGroup]="form"
 >
-  <mat-form-field>
-    <mat-label>Name</mat-label>
-    <input
-      type="text"
-      matInput
-      formControlName="name"
-    />
-  </mat-form-field>
-  <mat-form-field>
-    <mat-label>Preparation time (minutes)</mat-label>
-    <input
-      type="number"
-      matInput
-      formControlName="preparationTimeInMinutes"
-    />
-  </mat-form-field>
-  <mat-form-field>
-    <mat-label>Description</mat-label>
-    <input
-      type="text"
-      matInput
-      formControlName="description"
-    />
-  </mat-form-field>
+
+  <app-control-input
+    controlName="name"
+    type="text"
+    label="Name"
+    [maxLength]="maxNameLength"
+  ></app-control-input>
+  <app-control-input
+    controlName="preparationTimeInMinutes"
+    type="number"
+    label="Preparation time (in minutes)"
+  ></app-control-input>
+  <app-control-input
+    class="last-control"
+    controlName="description"
+    type="text"
+    label="Description"
+    [maxLength]="maxDescriptionLength"
+  ></app-control-input>
   <div
     class="ingredients"
     formArrayName="ingredients"
@@ -43,22 +38,18 @@
       [formGroupName]="i"
     >
       <h4>New ingredient:</h4>
-      <mat-form-field>
-        <mat-label>Name</mat-label>
-        <input
-          type="text"
-          matInput
-          formControlName="name"
-        />
-      </mat-form-field>
-      <mat-form-field>
-        <mat-label>Quantity</mat-label>
-        <input
-          type="text"
-          matInput
-          formControlName="quantity"
-        />
-      </mat-form-field>
+      <app-control-input
+        controlName="name"
+        type="text"
+        label="Name"
+        [maxLength]="maxNameLength"
+      ></app-control-input>
+      <app-control-input
+        class="last-control"
+        controlName="quantity"
+        type="number"
+        label="Quantity"
+      ></app-control-input>
       <button
         class="btn"
         type="button"
@@ -69,6 +60,12 @@
       </button>
     </div>
   </div>
+  <mat-error
+    class="fine-print"
+    *ngIf="getFormArray('ingredients').length < 2"
+  >At least two ingredients are required</mat-error>
+  <span class="fine-print"><span class="strong">*</span> - required field.</span>
+
   <div class="form__bottom">
     <button
       class="btn"
