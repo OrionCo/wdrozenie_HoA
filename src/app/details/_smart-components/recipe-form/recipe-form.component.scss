@@ -17,8 +17,13 @@
   }
 
   &__bottom {
+    margin-top: 20px;
     display: flex;
     justify-content: space-between;
     align-items: center;
   }
+}
+
+.last-control {
+  margin-bottom: 20px;
 }

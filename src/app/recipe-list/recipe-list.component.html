@@ -20,11 +20,29 @@
     </a>
   </div>
   <div class="recipes__list">
-    <app-recipe-tile
-      *ngFor="let recipe of recipes$ | async"
-      [recipe]="recipe"
-      (recipeSelected)="fetchRecipe($event)"
-      (recipeDeleted)="deleteRecipe($event)"
-    ></app-recipe-tile>
+    <ng-container *ngIf="(recipes$ | async) as recipes; else loading">
+      <app-recipe-tile
+        *ngFor="let recipe of recipes"
+        [recipe]="recipe"
+        (recipeSelected)="fetchRecipe($event)"
+        (recipeDeleted)="deleteRecipe($event)"
+      ></app-recipe-tile>
+      <div
+        *ngIf="!recipes.length"
+        class="no-recipes"
+      >
+        <mat-icon class="icon--large faded">
+          indeterminate_check_box
+        </mat-icon>
+        <span class="text--large faded">
+          No recipes found...
+        </span>
+      </div>
+    </ng-container>
+    <ng-template #loading>
+      <div class="no-recipes">
+        <mat-spinner></mat-spinner>
+      </div>
+    </ng-template>
   </div>
 </aside>

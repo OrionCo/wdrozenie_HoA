@@ -1,8 +1,9 @@
 import { Injectable } from '@angular/core';
 
 import { HttpClient } from '@angular/common/http';
-import { BehaviorSubject, first, Observable, tap } from 'rxjs';
+import { BehaviorSubject, catchError, first, Observable, of, tap } from 'rxjs';
 import { Recipe } from 'src/models/api.model';
+import { SnackbarService } from './snackbar.service';
 
 @Injectable()
 export class RecipeService {
@@ -15,7 +16,7 @@ export class RecipeService {
   selectedRecipe$: Observable<Recipe | null> =
     this.selectedRecipeSubject$.asObservable();
 
-  constructor(private _http: HttpClient) {}
+  constructor(private _http: HttpClient, private _snackBar: SnackbarService) {}
 
   createRecipe(data: Recipe): Observable<Recipe> {
     return this._http.post<Recipe>('recipe', data).pipe(first());
