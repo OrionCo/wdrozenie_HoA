@@ -1,0 +1,16 @@
+.light {
+  font-weight: 400;
+}
+
+.info-header {
+  margin-bottom: 10px;
+}
+
+.description,
+.ingredient:not(:last-of-type) {
+  margin-bottom: 15px;
+}
+
+.ingredient__name {
+  margin-bottom: 5px;
+}

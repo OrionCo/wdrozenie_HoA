@@ -1,9 +1,4 @@
-import {
-  ChangeDetectionStrategy,
-  Component,
-  Input,
-  OnInit,
-} from '@angular/core';
+import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { dialogModel } from '../../models/dialog.model';
 import { AuthorDialogComponent } from './_dumb-components/author-dialog/author-dialog.component';

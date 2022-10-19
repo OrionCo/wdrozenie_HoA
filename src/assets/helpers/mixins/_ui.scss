@@ -1,3 +1,5 @@
+@import 'consts';
+
 @mixin ui {
   .btn {
     width: min-content;
@@ -5,5 +7,42 @@
     &:not(:last-of-type) {
       margin-bottom: 15px;
     }
+  }
+
+  .control {
+    width: 100%;
+    margin-bottom: 10px;
+  }
+
+  .align-right {
+    float: right;
+  }
+
+  .fine-print {
+    font-size: 12px;
+
+    .strong {
+      font-size: 16px;
+    }
+  }
+
+  .icon--small {
+    font-size: 18px;
+    width: 18px !important;
+    height: 18px !important;
+  }
+  
+  .icon--large {
+    font-size: 150px;
+    width: 150px !important;
+    height: 150px !important;
+  }
+  
+  .faded {
+    color: map-get($colors, border);
+  }
+  
+  .text--large {
+    font-size: 30px;
   }
 }
