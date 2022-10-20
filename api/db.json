@@ -1,0 +1,36 @@
+{
+  "recipe": [
+    {
+      "_id": "abcdef",
+      "name": "New recipe",
+      "preparationTimeInMinutes": "123",
+      "description": "New recipe on the json-server",
+      "ingredients": [
+        {
+          "name": "New ingredient1",
+          "quantity": "1"
+        },
+        {
+          "name": "New ingredient2",
+          "quantity": "2"
+        }
+      ]
+    },
+    {
+      "name": "New recipe (eeeeeeeeeeeeeeeeee)",
+      "preparationTimeInMinutes": "123",
+      "description": "asdasdasdadasdasd",
+      "ingredients": [
+        {
+          "name": "123123",
+          "quantity": "1"
+        },
+        {
+          "name": "asdasd",
+          "quantity": "12"
+        }
+      ],
+      "_id": "OjCK-NW"
+    }
+  ]
+}
