@@ -48,11 +48,7 @@ export class RecipeService {
   }
 
   deleteRecipe(recipeId: string): Observable<Recipe> {
-    return this._http
-      .delete<Recipe>(`recipe/${recipeId}`)
-      .pipe(
-        switchMap((recipe: Recipe) => this.getRecipes().pipe(map(() => recipe)))
-      );
+    return this._http.delete<Recipe>(`recipe/${recipeId}`);
   }
 
   getRecipes(): Observable<Recipe[]> {
