@@ -9,6 +9,7 @@ import { StoreModule } from '@ngrx/store';
 import { recipeReducer } from './store/reducers/recipe.reducer';
 import { EffectsModule } from '@ngrx/effects';
 import { RecipeEffects } from './store/effects/recipe.effects';
+import { RecipeFacade } from './store/facades/recipe.facade';
 
 @NgModule({
   declarations: [
@@ -24,5 +25,6 @@ import { RecipeEffects } from './store/effects/recipe.effects';
     EffectsModule.forFeature([RecipeEffects]),
   ],
   exports: [RecipeListComponent, ...RECIPE_LIST_SMARTS, ...RECIPE_LIST_DUMBS],
+  providers: [RecipeFacade],
 })
 export class RecipeListModule {}

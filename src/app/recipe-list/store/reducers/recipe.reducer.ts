@@ -1,22 +1,7 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { createReducer, on } from '@ngrx/store';
 import { Recipe } from 'src/models/api.model';
-import {
-  addRecipe,
-  addRecipeFail,
-  addRecipeSuccess,
-  deleteRecipe,
-  deleteRecipeFail,
-  deleteRecipeSuccess,
-  getRecipe,
-  getRecipeFail,
-  getRecipes,
-  getRecipesFail,
-  getRecipesSuccess,
-  updateRecipe,
-  updateRecipeFail,
-  updateRecipeSuccess,
-} from '../actions/recipe.actions';
+import { RecipeListActions } from '../actions/recipe.actions';
 
 export interface RecipeState {
   recipes: Recipe[];
@@ -33,21 +18,21 @@ export const initialState: RecipeState = {
 export const recipeReducer = createReducer(
   initialState,
   on(
-    getRecipes,
-    getRecipe,
-    addRecipe,
-    deleteRecipe,
-    updateRecipe,
+    RecipeListActions.getAllRecipes,
+    RecipeListActions.getSingleRecipe,
+    RecipeListActions.addRecipe,
+    RecipeListActions.deleteRecipe,
+    RecipeListActions.updateRecipe,
     (state): RecipeState => {
       return { ...state, loading: true };
     }
   ),
   on(
-    getRecipesFail,
-    addRecipeFail,
-    deleteRecipeFail,
-    updateRecipeFail,
-    getRecipeFail,
+    RecipeListActions.getAllRecipesFail,
+    RecipeListActions.getSingleRecipeFail,
+    RecipeListActions.addRecipeFail,
+    RecipeListActions.deleteRecipeFail,
+    RecipeListActions.updateRecipeFail,
     (state, { error }): RecipeState => {
       return {
         ...state,
@@ -56,33 +41,41 @@ export const recipeReducer = createReducer(
       };
     }
   ),
-  on(getRecipesSuccess, (state, { recipes }): RecipeState => {
-    return { ...state, recipes, loading: false, error: null };
-  }),
-  on(deleteRecipeSuccess, (state, { removedRecipe }): RecipeState => {
-    const filteredRecipes = state.recipes.filter(
-      (recipe) => recipe._id !== removedRecipe._id
-    );
-    console.log(`REMOVED::: ${removedRecipe}`);
+  on(
+    RecipeListActions.getAllRecipesSuccess,
+    (state, { recipes }): RecipeState => {
+      return { ...state, recipes, loading: false, error: null };
+    }
+  ),
+  on(
+    RecipeListActions.deleteRecipeSuccess,
+    (state, { removedRecipe }): RecipeState => {
+      const filteredRecipes = state.recipes.filter(
+        (recipe) => recipe._id !== removedRecipe._id
+      );
 
-    return {
-      ...state,
-      recipes: filteredRecipes,
-      loading: false,
-    };
-  }),
-  on(addRecipeSuccess, (state, { recipe }): RecipeState => {
+      return {
+        ...state,
+        recipes: filteredRecipes,
+        loading: false,
+      };
+    }
+  ),
+  on(RecipeListActions.addRecipeSuccess, (state, { recipe }): RecipeState => {
     const recipes = [...state.recipes, recipe];
     console.log(`ADDED::: ${recipe}`);
     return { ...state, recipes, loading: false };
   }),
-  on(updateRecipeSuccess, (state, { recipe }): RecipeState => {
-    const recipes = state.recipes.map(
-      (oldRecipe) =>
-        state.recipes.find((item) => item._id === recipe._id) || oldRecipe
-    );
-    console.log(`UPDATED::: ${recipe}`);
-    console.log(`RECIPES:::`, recipes);
-    return { ...state, recipes };
-  })
+  on(
+    RecipeListActions.updateRecipeSuccess,
+    (state, { recipe }): RecipeState => {
+      const recipes = state.recipes.map(
+        (oldRecipe) =>
+          state.recipes.find((item) => item._id === recipe._id) || oldRecipe
+      );
+      console.log(`UPDATED::: ${recipe}`);
+      console.log(`RECIPES:::`, recipes);
+      return { ...state, recipes };
+    }
+  )
 );

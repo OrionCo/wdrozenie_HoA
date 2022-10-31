@@ -54,7 +54,7 @@ export class RecipeFormComponent
       const formData = this.form.getRawValue();
       if (this.editMode && this.recipeData) {
         this._recipeService
-          .updateRecipe(formData, this.recipeData._id)
+          .updateRecipe(formData)
           .pipe(first())
           .subscribe({
             next: () => {

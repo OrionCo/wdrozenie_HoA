@@ -23,7 +23,7 @@
     <ng-container *ngIf="(loading$ | async) === false">
       <ng-container *ngIf="recipes$ | async as recipes">
         <app-recipe-tile
-          *ngFor="let recipe of recipes$ | async"
+          *ngFor="let recipe of recipes"
           [recipe]="recipe"
           (recipeSelected)="fetchRecipe($event)"
           (recipeDeleted)="deleteRecipe($event)"

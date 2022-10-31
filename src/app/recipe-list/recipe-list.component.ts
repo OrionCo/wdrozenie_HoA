@@ -3,12 +3,7 @@ import { map, Observable } from 'rxjs';
 import { RecipeService } from '../services/recipe.service';
 import { Router } from '@angular/router';
 import { Recipe } from 'src/models/api.model';
-import { Store } from '@ngrx/store';
-import { deleteRecipe, getRecipes } from './store/actions/recipe.actions';
-import {
-  getLoadingStatus,
-  selectRecipeList,
-} from './store/selectors/recipe.selectors';
+import { RecipeFacade } from './store/facades/recipe.facade';
 
 @Component({
   selector: 'app-recipe-list',
@@ -17,19 +12,17 @@ import {
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class RecipeListComponent implements OnInit {
-  recipes$!: Observable<Recipe[]>;
-  loading$!: Observable<boolean>;
+  recipes$: Observable<Recipe[]> = this._recipeFacade.selectRecipes();
+  loading$: Observable<boolean> = this._recipeFacade.getLoadingStatus();
 
   constructor(
     private _recipeService: RecipeService,
     private _router: Router,
-    private store: Store
+    private _recipeFacade: RecipeFacade
   ) {}
 
   ngOnInit(): void {
-    this.store.dispatch(getRecipes());
-    this.recipes$ = this.store.select(selectRecipeList);
-    this.loading$ = this.store.select(getLoadingStatus);
+    this._recipeFacade.getAllRecipes();
   }
 
   filterRecipes(value: string): void {
@@ -50,6 +43,6 @@ export class RecipeListComponent implements OnInit {
   }
 
   deleteRecipe(recipeId: string): void {
-    this.store.dispatch(deleteRecipe({ recipeId }));
+    this._recipeFacade.deleteRecipe(recipeId);
   }
 }
