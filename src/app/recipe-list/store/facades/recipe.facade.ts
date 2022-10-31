@@ -10,6 +10,8 @@ import { Recipe } from 'src/models/api.model';
 
 @Injectable()
 export class RecipeFacade {
+  recipes$: Observable<Recipe[]> = this._store.select(selectRecipeList);
+  loading$: Observable<boolean> = this._store.select(getLoadingStatus);
   constructor(private _store: Store) {}
 
   getAllRecipes() {
@@ -30,13 +32,5 @@ export class RecipeFacade {
 
   deleteRecipe(recipeId: string) {
     this._store.dispatch(RecipeListActions.deleteRecipe({ recipeId }));
-  }
-
-  selectRecipes(): Observable<Recipe[]> {
-    return this._store.select(selectRecipeList);
-  }
-
-  getLoadingStatus(): Observable<boolean> {
-    return this._store.select(getLoadingStatus);
   }
 }

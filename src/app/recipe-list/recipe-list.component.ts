@@ -12,8 +12,8 @@ import { RecipeFacade } from './store/facades/recipe.facade';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class RecipeListComponent implements OnInit {
-  recipes$: Observable<Recipe[]> = this._recipeFacade.selectRecipes();
-  loading$: Observable<boolean> = this._recipeFacade.getLoadingStatus();
+  recipes$: Observable<Recipe[]> = this._recipeFacade.recipes$;
+  loading$: Observable<boolean> = this._recipeFacade.loading$;
 
   constructor(
     private _recipeService: RecipeService,
