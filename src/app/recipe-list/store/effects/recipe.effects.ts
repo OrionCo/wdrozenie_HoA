@@ -99,7 +99,6 @@ export class RecipeEffects {
         switchMap((action) =>
           this._rootFacade.routerIdParam$.pipe(
             map((id) => {
-              console.log('aa');
               this._snackbar.open('Successfully deleted recipe.');
               if (id == action.recipeId) {
                 this._router.navigate(['/']);
