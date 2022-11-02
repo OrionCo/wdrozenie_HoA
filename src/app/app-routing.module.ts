@@ -5,6 +5,7 @@ import { RecipeFormComponent } from './details/_smart-components/recipe-form/rec
 import { DetailsComponent } from './details/details.component';
 import { ViewRecipeComponent } from './details/_dumb-components/view-recipe/view-recipe.component';
 import { HomeComponent } from './details/_dumb-components/home/home.component';
+import { RecipeGuard } from './services/recipe.guard';
 
 const routes: Routes = [
   {
@@ -28,11 +29,13 @@ const routes: Routes = [
         path: 'recipe/:id',
         component: ViewRecipeComponent,
         pathMatch: 'prefix',
+        canActivate: [RecipeGuard],
       },
       {
         path: 'recipe/edit/:id',
         component: RecipeFormComponent,
         pathMatch: 'prefix',
+        canActivate: [RecipeGuard],
       },
     ],
   },

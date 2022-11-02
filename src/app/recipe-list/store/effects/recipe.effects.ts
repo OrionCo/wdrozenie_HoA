@@ -2,9 +2,10 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
-import { catchError, map, of, switchMap } from 'rxjs';
+import { catchError, first, map, of, switchMap } from 'rxjs';
 import { RecipeService } from 'src/app/services/recipe.service';
 import { SnackbarService } from 'src/app/services/snackbar.service';
+import { RootFacade } from 'src/app/store/facades/root.facade';
 import { Recipe } from 'src/models/api.model';
 import { RecipeListActions } from '../actions/recipe.actions';
 
@@ -14,7 +15,8 @@ export class RecipeEffects {
     private _actions$: Actions,
     private _recipeService: RecipeService,
     private _snackbar: SnackbarService,
-    private _router: Router
+    private _router: Router,
+    private _rootFacade: RootFacade
   ) {}
 
   getRecipes$ = createEffect(() => {
@@ -30,25 +32,10 @@ export class RecipeEffects {
           map((recipes: Recipe[]) =>
             RecipeListActions.getAllRecipesSuccess({ recipes })
           ),
-          catchError((error: HttpErrorResponse) =>
-            of(RecipeListActions.getAllRecipesFail({ error }))
-          )
-        )
-      )
-    );
-  });
-
-  getSingleRecipe$ = createEffect(() => {
-    return this._actions$.pipe(
-      ofType(RecipeListActions.getSingleRecipe),
-      switchMap((action) =>
-        this._recipeService.fetchRecipe(action.recipeId).pipe(
-          map((recipe: Recipe) =>
-            RecipeListActions.getSingleRecipeSuccess({ recipe })
-          ),
-          catchError((error: HttpErrorResponse) =>
-            of(RecipeListActions.getSingleRecipeFail({ error }))
-          )
+          catchError((error: HttpErrorResponse) => {
+            this._snackbar.open('Failed to fetch recipes.', false);
+            return of(RecipeListActions.getAllRecipesFail({ error }));
+          })
         )
       )
     );
@@ -62,9 +49,10 @@ export class RecipeEffects {
           map((recipe: Recipe) =>
             RecipeListActions.addRecipeSuccess({ recipe })
           ),
-          catchError((error: HttpErrorResponse) =>
-            of(RecipeListActions.addRecipeFail(error))
-          )
+          catchError((error: HttpErrorResponse) => {
+            this._snackbar.open('Failed to create recipe.', false);
+            return of(RecipeListActions.addRecipeFail(error));
+          })
         )
       )
     );
@@ -73,16 +61,17 @@ export class RecipeEffects {
   updateRecipe$ = createEffect(() => {
     return this._actions$.pipe(
       ofType(RecipeListActions.updateRecipe),
-      switchMap((action) =>
-        this._recipeService.updateRecipe(action.recipe).pipe(
+      switchMap((action) => {
+        return this._recipeService.updateRecipe(action.recipe).pipe(
           map((recipe: Recipe) =>
             RecipeListActions.updateRecipeSuccess({ recipe })
           ),
-          catchError((error: HttpErrorResponse) =>
-            of(RecipeListActions.updateRecipeFail(error))
-          )
-        )
-      )
+          catchError((error: HttpErrorResponse) => {
+            this._snackbar.open('Failed to update recipe.', false);
+            return of(RecipeListActions.updateRecipeFail(error));
+          })
+        );
+      })
     );
   });
 
@@ -91,11 +80,9 @@ export class RecipeEffects {
       ofType(RecipeListActions.deleteRecipe),
       switchMap((action) =>
         this._recipeService.deleteRecipe(action.recipeId).pipe(
-          map((removedRecipe) => {
-            this._snackbar.open('Successfully deleted recipe.');
-            this._router.navigate(['/']);
-            return RecipeListActions.deleteRecipeSuccess({ removedRecipe });
-          }),
+          map(() =>
+            RecipeListActions.deleteRecipeSuccess({ recipeId: action.recipeId })
+          ),
           catchError((error: HttpErrorResponse) => {
             this._snackbar.open('Failed to delete recipe.', false);
             return of(RecipeListActions.deleteRecipeFail({ error }));
@@ -104,4 +91,44 @@ export class RecipeEffects {
       )
     );
   });
+
+  deleteRecipeSuccess$ = createEffect(
+    () => {
+      return this._actions$.pipe(
+        ofType(RecipeListActions.deleteRecipeSuccess),
+        switchMap((action) =>
+          this._rootFacade.routerIdParam$.pipe(
+            map((id) => {
+              this._snackbar.open('Successfully deleted recipe.');
+              if (id == action.recipeId) {
+                this._router.navigate(['/']);
+              }
+            }),
+            first()
+          )
+        )
+      );
+    },
+    { dispatch: false }
+  );
+
+  editedResourceSuccess$ = createEffect(
+    () => {
+      return this._actions$.pipe(
+        ofType(
+          RecipeListActions.addRecipeSuccess,
+          RecipeListActions.updateRecipeSuccess
+        ),
+        map((action) => {
+          this._router.navigate(['/recipe', action.recipe._id]);
+          if (action.type === RecipeListActions.addRecipeSuccess.type) {
+            this._snackbar.open('Successfully created recipe.');
+          } else {
+            this._snackbar.open('Successfully updated recipe.');
+          }
+        })
+      );
+    },
+    { dispatch: false }
+  );
 }

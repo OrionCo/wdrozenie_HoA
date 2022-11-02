@@ -1,7 +1,7 @@
 {
   "recipe": [
     {
-      "name": "asdasd",
+      "name": "asdasd123",
       "preparationTimeInMinutes": "123123",
       "description": "asdasdasdasdasd",
       "ingredients": [
@@ -159,6 +159,38 @@
         }
       ],
       "_id": 12
+    },
+    {
+      "name": "store recipe",
+      "preparationTimeInMinutes": "123123",
+      "description": "asdasdasdaasdasd",
+      "ingredients": [
+        {
+          "name": "asd",
+          "quantity": "12"
+        },
+        {
+          "name": "asd",
+          "quantity": "123"
+        }
+      ],
+      "_id": 13
+    },
+    {
+      "name": "store recipe 2",
+      "preparationTimeInMinutes": "12",
+      "description": "asjhdbjkashbdasd",
+      "ingredients": [
+        {
+          "name": "asd",
+          "quantity": "123"
+        },
+        {
+          "name": "asd",
+          "quantity": "123"
+        }
+      ],
+      "_id": 14
     }
   ]
 }
