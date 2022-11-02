@@ -27,7 +27,7 @@ export const RecipeListActions = createActionGroup({
 
     // delete recipe
     'Delete Recipe': props<{ recipeId: string }>(),
-    'Delete Recipe Success': props<{ removedRecipe: Recipe }>(),
+    'Delete Recipe Success': props<{ recipeId: string }>(),
     'Delete Recipe Fail': props<{ error: HttpErrorResponse }>(),
   },
 });

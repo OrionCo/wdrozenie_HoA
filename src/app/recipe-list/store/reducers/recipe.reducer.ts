@@ -6,12 +6,14 @@ import { RecipeListActions } from '../actions/recipe.actions';
 export interface RecipeState {
   recipes: Recipe[];
   loading: boolean;
+  loaded: boolean;
   error: HttpErrorResponse | null;
 }
 
 export const initialState: RecipeState = {
   recipes: [],
   loading: false,
+  loaded: false,
   error: null,
 };
 
@@ -19,7 +21,6 @@ export const recipeReducer = createReducer(
   initialState,
   on(
     RecipeListActions.getAllRecipes,
-    RecipeListActions.getSingleRecipe,
     RecipeListActions.addRecipe,
     RecipeListActions.deleteRecipe,
     RecipeListActions.updateRecipe,
@@ -37,6 +38,7 @@ export const recipeReducer = createReducer(
       return {
         ...state,
         loading: false,
+        loaded: false,
         error: new HttpErrorResponse({ error }),
       };
     }
@@ -44,27 +46,35 @@ export const recipeReducer = createReducer(
   on(
     RecipeListActions.getAllRecipesSuccess,
     (state, { recipes }): RecipeState => {
-      return { ...state, recipes, loading: false, error: null };
+      return { ...state, recipes, loading: false, loaded: true, error: null };
     }
   ),
   on(
     RecipeListActions.deleteRecipeSuccess,
-    (state, { removedRecipe }): RecipeState => {
+    (state, { recipeId }): RecipeState => {
       const filteredRecipes = state.recipes.filter(
-        (recipe) => recipe._id !== removedRecipe._id
+        (recipe) => recipe._id !== recipeId
       );
 
       return {
         ...state,
         recipes: filteredRecipes,
         loading: false,
+        loaded: true,
+        error: null,
       };
     }
   ),
   on(RecipeListActions.addRecipeSuccess, (state, { recipe }): RecipeState => {
     const recipes = [...state.recipes, recipe];
-    console.log(`ADDED::: ${recipe}`);
-    return { ...state, recipes, loading: false };
+
+    return {
+      ...state,
+      recipes,
+      loading: false,
+      loaded: true,
+      error: null,
+    };
   }),
   on(
     RecipeListActions.updateRecipeSuccess,
@@ -73,9 +83,8 @@ export const recipeReducer = createReducer(
         (oldRecipe) =>
           state.recipes.find((item) => item._id === recipe._id) || oldRecipe
       );
-      console.log(`UPDATED::: ${recipe}`);
-      console.log(`RECIPES:::`, recipes);
-      return { ...state, recipes };
+
+      return { ...state, recipes, loading: false, loaded: true, error: null };
     }
   )
 );

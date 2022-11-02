@@ -4,14 +4,18 @@ import { Observable } from 'rxjs';
 import { RecipeListActions } from 'src/app/recipe-list/store/actions/recipe.actions';
 import {
   selectRecipeList,
-  getLoadingStatus,
+  selectLoadingStatus,
+  selectRecipe,
+  selectRecipesLoaded,
 } from 'src/app/recipe-list/store/selectors/recipe.selectors';
 import { Recipe } from 'src/models/api.model';
 
 @Injectable()
 export class RecipeFacade {
   recipes$: Observable<Recipe[]> = this._store.select(selectRecipeList);
-  loading$: Observable<boolean> = this._store.select(getLoadingStatus);
+  loading$: Observable<boolean> = this._store.select(selectLoadingStatus);
+  loaded$: Observable<boolean> = this._store.select(selectRecipesLoaded);
+  recipe$: Observable<Recipe | undefined> = this._store.select(selectRecipe);
   constructor(private _store: Store) {}
 
   getAllRecipes() {

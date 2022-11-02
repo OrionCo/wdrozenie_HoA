@@ -11,10 +11,8 @@ import {
   FormGroup,
   Validators,
 } from '@angular/forms';
-import { Router } from '@angular/router';
-import { first, takeUntil } from 'rxjs';
+import { takeUntil } from 'rxjs';
 import { AbstractRecipeComponent } from 'src/app/shared/abstract-recipe.component';
-import { Recipe } from 'src/models/api.model';
 
 @Component({
   selector: 'app-recipe-form',
@@ -30,19 +28,19 @@ export class RecipeFormComponent
   maxNameLength: number = 80;
   maxDescriptionLength: number = 255;
 
-  constructor(
-    private _fb: FormBuilder,
-    private _cdr: ChangeDetectorRef,
-    private _router: Router
-  ) {
+  constructor(private _fb: FormBuilder, private _cdr: ChangeDetectorRef) {
     super();
   }
 
-  override ngOnInit(): void {
-    super.ngOnInit();
+  ngOnInit(): void {
     this.recipeData$?.pipe(takeUntil(this.destroy$)).subscribe({
       next: (recipe) => {
         this.recipeData = recipe;
+        if (this.recipeData) {
+          this.editMode = true;
+        } else {
+          this.editMode = false;
+        }
         this._initForm();
         this._patchForm();
       },
@@ -53,33 +51,12 @@ export class RecipeFormComponent
     if (this.form.valid) {
       const formData = this.form.getRawValue();
       if (this.editMode && this.recipeData) {
-        this._recipeService
-          .updateRecipe(formData)
-          .pipe(first())
-          .subscribe({
-            next: () => {
-              this._snackBar.open('Successfully edited recipe.');
-              this._router.navigate([`recipe/${this.recipeData?._id}`]);
-            },
-            error: (err) => {
-              console.warn(err);
-              this._snackBar.open('Failed to edit recipe.', false);
-            },
-          });
+        this._recipeFacade.updateRecipe({
+          ...formData,
+          _id: this.recipeData._id,
+        });
       } else {
-        this._recipeService
-          .createRecipe(formData)
-          .pipe(first())
-          .subscribe({
-            next: (res: Recipe) => {
-              this._snackBar.open('Successfully created recipe.');
-              this._router.navigate([`recipe/${res?._id}`]);
-            },
-            error: (err) => {
-              console.warn(err);
-              this._snackBar.open('Failed to create recipe.', false);
-            },
-          });
+        this._recipeFacade.addRecipe(formData);
       }
     }
   }
