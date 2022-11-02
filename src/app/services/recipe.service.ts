@@ -39,20 +39,16 @@ export class RecipeService {
       );
   }
 
-  updateRecipe(data: Recipe, recipeId: string): Observable<Recipe> {
+  updateRecipe(data: Recipe): Observable<Recipe> {
     return this._http
-      .put<Recipe>(`recipe/${recipeId}`, data)
+      .put<Recipe>(`recipe/${data._id}`, data)
       .pipe(
         switchMap((recipe: Recipe) => this.getRecipes().pipe(map(() => recipe)))
       );
   }
 
   deleteRecipe(recipeId: string): Observable<Recipe> {
-    return this._http
-      .delete<Recipe>(`recipe/${recipeId}`)
-      .pipe(
-        switchMap((recipe: Recipe) => this.getRecipes().pipe(map(() => recipe)))
-      );
+    return this._http.delete<Recipe>(`recipe/${recipeId}`);
   }
 
   getRecipes(): Observable<Recipe[]> {

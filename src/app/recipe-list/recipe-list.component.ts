@@ -1,9 +1,9 @@
 import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
-import { first, map, Observable } from 'rxjs';
+import { map, Observable } from 'rxjs';
 import { RecipeService } from '../services/recipe.service';
 import { Router } from '@angular/router';
 import { Recipe } from 'src/models/api.model';
-import { SnackbarService } from '../services/snackbar.service';
+import { RecipeFacade } from './store/facades/recipe.facade';
 
 @Component({
   selector: 'app-recipe-list',
@@ -12,24 +12,17 @@ import { SnackbarService } from '../services/snackbar.service';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class RecipeListComponent implements OnInit {
-  recipes$?: Observable<Recipe[]> = this._recipeService.recipes$;
+  recipes$: Observable<Recipe[]> = this._recipeFacade.recipes$;
+  loading$: Observable<boolean> = this._recipeFacade.loading$;
 
   constructor(
     private _recipeService: RecipeService,
     private _router: Router,
-    private _snackBar: SnackbarService
+    private _recipeFacade: RecipeFacade
   ) {}
 
   ngOnInit(): void {
-    this._recipeService
-      .getRecipes()
-      .pipe(first())
-      .subscribe({
-        error: (err) => {
-          this._snackBar.open('Failed to fetch recipes.', false);
-          console.warn(err);
-        },
-      });
+    this._recipeFacade.getAllRecipes();
   }
 
   filterRecipes(value: string): void {
@@ -50,18 +43,6 @@ export class RecipeListComponent implements OnInit {
   }
 
   deleteRecipe(recipeId: string): void {
-    this._recipeService
-      .deleteRecipe(recipeId)
-      .pipe(first())
-      .subscribe({
-        next: () => {
-          this._snackBar.open('Successfully deleted recipe.');
-          this._router.navigate(['/']);
-        },
-        error: (err) => {
-          this._snackBar.open('Failed to delete recipe.', false);
-          console.warn(err);
-        },
-      });
+    this._recipeFacade.deleteRecipe(recipeId);
   }
 }
