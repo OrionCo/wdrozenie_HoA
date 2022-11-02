@@ -36,11 +36,7 @@ export class RecipeFormComponent
     this.recipeData$?.pipe(takeUntil(this.destroy$)).subscribe({
       next: (recipe) => {
         this.recipeData = recipe;
-        if (this.recipeData) {
-          this.editMode = true;
-        } else {
-          this.editMode = false;
-        }
+        this.editMode = !!this.recipeData;
         this._initForm();
         this._patchForm();
       },
