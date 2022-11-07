@@ -7,6 +7,7 @@ import {
   selectLoadingStatus,
   selectRecipe,
   selectRecipesLoaded,
+  selectFilteredRecipes,
 } from 'src/app/recipe-list/store/selectors/recipe.selectors';
 import { Recipe } from 'src/models/api.model';
 
@@ -36,5 +37,9 @@ export class RecipeFacade {
 
   deleteRecipe(recipeId: string) {
     this._store.dispatch(RecipeListActions.deleteRecipe({ recipeId }));
+  }
+
+  filterRecipes(searchValue: string) {
+    return this._store.select(selectFilteredRecipes(searchValue));
   }
 }
