@@ -1,18 +1,8 @@
 import { Injectable } from '@angular/core';
 
 import { HttpClient } from '@angular/common/http';
-import {
-  BehaviorSubject,
-  catchError,
-  EMPTY,
-  map,
-  Observable,
-  switchMap,
-  tap,
-} from 'rxjs';
+import { BehaviorSubject, map, Observable, switchMap, tap } from 'rxjs';
 import { Recipe } from 'src/models/api.model';
-import { SnackbarService } from './snackbar.service';
-import { Router } from '@angular/router';
 
 @Injectable()
 export class RecipeService {
@@ -25,11 +15,7 @@ export class RecipeService {
   selectedRecipe$: Observable<Recipe | null> =
     this.selectedRecipeSubject$.asObservable();
 
-  constructor(
-    private _http: HttpClient,
-    private _snackBar: SnackbarService,
-    private _router: Router
-  ) {}
+  constructor(private _http: HttpClient) {}
 
   createRecipe(data: Recipe): Observable<Recipe> {
     return this._http
@@ -52,26 +38,14 @@ export class RecipeService {
   }
 
   getRecipes(): Observable<Recipe[]> {
-    return this._http.get<Recipe[]>('recipe').pipe(
-      tap((recipes: Recipe[]) => this.recipesSubject$.next(recipes)),
-      catchError((err) => {
-        console.warn(err);
-        this._snackBar.open('Failed to fetch recipes.', false);
-        this._router.navigate(['/home']);
-        return EMPTY;
-      })
-    );
+    return this._http
+      .get<Recipe[]>('recipe')
+      .pipe(tap((recipes: Recipe[]) => this.recipesSubject$.next(recipes)));
   }
 
   fetchRecipe(recipeId: string): Observable<Recipe> {
-    return this._http.get<Recipe>(`recipe/${recipeId}`).pipe(
-      tap((recipe: Recipe) => this.selectedRecipeSubject$.next(recipe)),
-      catchError((err) => {
-        console.warn(err);
-        this._snackBar.open('Failed to fetch recipe.', false);
-        this._router.navigate(['/home']);
-        return EMPTY;
-      })
-    );
+    return this._http
+      .get<Recipe>(`recipe/${recipeId}`)
+      .pipe(tap((recipe: Recipe) => this.selectedRecipeSubject$.next(recipe)));
   }
 }

@@ -1,8 +1,7 @@
 import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { map, Observable } from 'rxjs';
-import { RecipeService } from '../services/recipe.service';
 import { Router } from '@angular/router';
-import { Recipe } from 'src/models/api.model';
+import { Ingredient, Recipe } from 'src/models/api.model';
 import { RecipeFacade } from './store/facades/recipe.facade';
 
 @Component({
@@ -15,11 +14,7 @@ export class RecipeListComponent implements OnInit {
   recipes$: Observable<Recipe[]> = this._recipeFacade.recipes$;
   loading$: Observable<boolean> = this._recipeFacade.loading$;
 
-  constructor(
-    private _recipeService: RecipeService,
-    private _router: Router,
-    private _recipeFacade: RecipeFacade
-  ) {}
+  constructor(private _router: Router, private _recipeFacade: RecipeFacade) {}
 
   ngOnInit(): void {
     this._recipeFacade.getAllRecipes();
@@ -27,12 +22,17 @@ export class RecipeListComponent implements OnInit {
 
   filterRecipes(value: string): void {
     if (!value) {
-      this.recipes$ = this._recipeService.recipes$;
+      this.recipes$ = this._recipeFacade.recipes$;
     } else {
       value = value.toLowerCase();
-      this.recipes$ = this._recipeService.recipes$!.pipe(
-        map((recipes) =>
-          recipes.filter((recipe) => recipe.name?.includes(value))
+      this.recipes$ = this._recipeFacade.recipes$!.pipe(
+        map((recipes: Recipe[]): Recipe[] =>
+          recipes.filter(
+            (recipe: Recipe) =>
+              recipe.ingredients.filter((ingredient: Ingredient) =>
+                ingredient.name.includes(value)
+              ).length || recipe.name.includes(value)
+          )
         )
       );
     }

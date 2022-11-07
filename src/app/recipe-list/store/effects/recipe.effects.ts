@@ -33,6 +33,7 @@ export class RecipeEffects {
             RecipeListActions.getAllRecipesSuccess({ recipes })
           ),
           catchError((error: HttpErrorResponse) => {
+            console.warn(error);
             this._snackbar.open('Failed to fetch recipes.', false);
             return of(RecipeListActions.getAllRecipesFail({ error }));
           })
@@ -50,6 +51,7 @@ export class RecipeEffects {
             RecipeListActions.addRecipeSuccess({ recipe })
           ),
           catchError((error: HttpErrorResponse) => {
+            console.warn(error);
             this._snackbar.open('Failed to create recipe.', false);
             return of(RecipeListActions.addRecipeFail(error));
           })
@@ -67,6 +69,7 @@ export class RecipeEffects {
             RecipeListActions.updateRecipeSuccess({ recipe })
           ),
           catchError((error: HttpErrorResponse) => {
+            console.warn(error);
             this._snackbar.open('Failed to update recipe.', false);
             return of(RecipeListActions.updateRecipeFail(error));
           })
@@ -84,6 +87,7 @@ export class RecipeEffects {
             RecipeListActions.deleteRecipeSuccess({ recipeId: action.recipeId })
           ),
           catchError((error: HttpErrorResponse) => {
+            console.warn(error);
             this._snackbar.open('Failed to delete recipe.', false);
             return of(RecipeListActions.deleteRecipeFail({ error }));
           })
