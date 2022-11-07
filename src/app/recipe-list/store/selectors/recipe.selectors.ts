@@ -1,6 +1,6 @@
 import { createFeatureSelector, createSelector } from '@ngrx/store';
 import { selectRouterState } from 'src/app/store/reducers/root.reducer';
-import { Recipe } from 'src/models/api.model';
+import { Ingredient, Recipe } from 'src/models/api.model';
 import { RecipeState } from '../reducers/recipe.reducer';
 
 export const selectRecipesState = createFeatureSelector<RecipeState>('recipes');
@@ -28,3 +28,18 @@ export const selectRecipe = createSelector(
     return recipes.find((recipe) => recipe._id == recipeId);
   }
 );
+
+export const selectFilteredRecipes = (searchValue: string) =>
+  createSelector(selectRecipeList, (recipes) => {
+    if (searchValue) {
+      searchValue = searchValue.toLowerCase();
+      return recipes.filter(
+        (recipe: Recipe) =>
+          recipe.ingredients.filter((ingredient: Ingredient) =>
+            ingredient.name.includes(searchValue)
+          ).length || recipe.name.includes(searchValue)
+      );
+    } else {
+      return recipes;
+    }
+  });

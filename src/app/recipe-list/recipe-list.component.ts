@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
-import { map, Observable } from 'rxjs';
+import { Observable } from 'rxjs';
 import { Router } from '@angular/router';
-import { Ingredient, Recipe } from 'src/models/api.model';
+import { Recipe } from 'src/models/api.model';
 import { RecipeFacade } from './store/facades/recipe.facade';
 
 @Component({
@@ -21,21 +21,7 @@ export class RecipeListComponent implements OnInit {
   }
 
   filterRecipes(value: string): void {
-    if (!value) {
-      this.recipes$ = this._recipeFacade.recipes$;
-    } else {
-      value = value.toLowerCase();
-      this.recipes$ = this._recipeFacade.recipes$!.pipe(
-        map((recipes: Recipe[]): Recipe[] =>
-          recipes.filter(
-            (recipe: Recipe) =>
-              recipe.ingredients.filter((ingredient: Ingredient) =>
-                ingredient.name.includes(value)
-              ).length || recipe.name.includes(value)
-          )
-        )
-      );
-    }
+    this.recipes$ = this._recipeFacade.filterRecipes(value);
   }
 
   fetchRecipe(recipeId: string): void {

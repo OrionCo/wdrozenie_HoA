@@ -1,20 +1,11 @@
 import { Injectable } from '@angular/core';
 
 import { HttpClient } from '@angular/common/http';
-import { BehaviorSubject, map, Observable, switchMap, tap } from 'rxjs';
+import { map, Observable, switchMap } from 'rxjs';
 import { Recipe } from 'src/models/api.model';
 
 @Injectable()
 export class RecipeService {
-  recipesSubject$: BehaviorSubject<Recipe[]> = new BehaviorSubject<Recipe[]>(
-    []
-  );
-  recipes$: Observable<Recipe[]> = this.recipesSubject$.asObservable();
-  selectedRecipeSubject$: BehaviorSubject<Recipe | null> =
-    new BehaviorSubject<Recipe | null>(null);
-  selectedRecipe$: Observable<Recipe | null> =
-    this.selectedRecipeSubject$.asObservable();
-
   constructor(private _http: HttpClient) {}
 
   createRecipe(data: Recipe): Observable<Recipe> {
@@ -38,14 +29,10 @@ export class RecipeService {
   }
 
   getRecipes(): Observable<Recipe[]> {
-    return this._http
-      .get<Recipe[]>('recipe')
-      .pipe(tap((recipes: Recipe[]) => this.recipesSubject$.next(recipes)));
+    return this._http.get<Recipe[]>('recipe');
   }
 
   fetchRecipe(recipeId: string): Observable<Recipe> {
-    return this._http
-      .get<Recipe>(`recipe/${recipeId}`)
-      .pipe(tap((recipe: Recipe) => this.selectedRecipeSubject$.next(recipe)));
+    return this._http.get<Recipe>(`recipe/${recipeId}`);
   }
 }
