@@ -1,0 +1,15 @@
+<h2 class="heading">Unsaved changes detected.<br />Are you sure you want to quit without saving?</h2>
+
+<div class="dialog-bottom">
+  <button
+    mat-button
+    mat-raised-button
+    (click)="return(false)"
+  >Cancel</button>
+  <button
+    mat-button
+    mat-raised-button
+    color="primary"
+    (click)="return(true)"
+  >Quit</button>
+</div>

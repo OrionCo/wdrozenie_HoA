@@ -5,9 +5,10 @@ import { RecipeListActions } from 'src/app/recipe-list/store/actions/recipe.acti
 import {
   selectRecipeList,
   selectLoadingStatus,
-  selectRecipe,
+  selectRecipeFromRoute,
   selectRecipesLoaded,
   selectFilteredRecipes,
+  selectRecipeById,
 } from 'src/app/recipe-list/store/selectors/recipe.selectors';
 import { Recipe } from 'src/models/api.model';
 
@@ -16,7 +17,9 @@ export class RecipeFacade {
   recipes$: Observable<Recipe[]> = this._store.select(selectRecipeList);
   loading$: Observable<boolean> = this._store.select(selectLoadingStatus);
   loaded$: Observable<boolean> = this._store.select(selectRecipesLoaded);
-  recipe$: Observable<Recipe | undefined> = this._store.select(selectRecipe);
+  viewedRecipe$: Observable<Recipe | undefined> = this._store.select(
+    selectRecipeFromRoute
+  );
   constructor(private _store: Store) {}
 
   getAllRecipes() {
@@ -41,5 +44,9 @@ export class RecipeFacade {
 
   filterRecipes(searchValue: string) {
     return this._store.select(selectFilteredRecipes(searchValue));
+  }
+
+  selectRecipe(recipeId: string) {
+    return this._store.select(selectRecipeById(recipeId));
   }
 }

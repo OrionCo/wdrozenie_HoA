@@ -1,6 +1,6 @@
 import { Directive, inject, OnDestroy } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { Observable, Subject } from 'rxjs';
+import { first, Observable, Subject } from 'rxjs';
 import { Recipe } from 'src/models/api.model';
 import { RecipeFacade } from '../recipe-list/store/facades/recipe.facade';
 import { RecipeService } from '../services/recipe.service';
@@ -15,7 +15,8 @@ export abstract class AbstractRecipeComponent implements OnDestroy {
 
   recipeId?: string;
   destroy$: Subject<boolean> = new Subject();
-  recipeData$: Observable<Recipe | undefined> = this._recipeFacade.recipe$;
+  recipeData$: Observable<Recipe | undefined> =
+    this._recipeFacade.viewedRecipe$.pipe(first());
   recipeData?: Recipe | null;
   editMode: boolean = false;
 
