@@ -6,6 +6,7 @@ import { DetailsComponent } from './details/details.component';
 import { ViewRecipeComponent } from './details/_dumb-components/view-recipe/view-recipe.component';
 import { HomeComponent } from './details/_dumb-components/home/home.component';
 import { RecipeGuard } from './services/recipe.guard';
+import { UnsavedGuard } from './services/unsaved.guard';
 
 const routes: Routes = [
   {
@@ -24,6 +25,7 @@ const routes: Routes = [
       {
         path: 'create',
         component: RecipeFormComponent,
+        canDeactivate: [UnsavedGuard],
       },
       {
         path: 'recipe/:id',
@@ -36,6 +38,7 @@ const routes: Routes = [
         component: RecipeFormComponent,
         pathMatch: 'prefix',
         canActivate: [RecipeGuard],
+        canDeactivate: [UnsavedGuard],
       },
     ],
   },

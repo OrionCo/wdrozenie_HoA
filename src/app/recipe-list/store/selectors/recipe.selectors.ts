@@ -20,7 +20,7 @@ export const selectRecipesLoaded = createSelector(
   (state: RecipeState) => state.loaded
 );
 
-export const selectRecipe = createSelector(
+export const selectRecipeFromRoute = createSelector(
   selectRecipeList,
   selectRouterState,
   (recipes, router): Recipe | undefined => {
@@ -42,4 +42,9 @@ export const selectFilteredRecipes = (searchValue: string) =>
     } else {
       return recipes;
     }
+  });
+
+export const selectRecipeById = (id: string) =>
+  createSelector(selectRecipeList, (recipes: Recipe[]) => {
+    return recipes.find((recipe: Recipe) => recipe._id === id);
   });
