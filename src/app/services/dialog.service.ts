@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
-import { Observable } from 'rxjs';
+import { map, Observable } from 'rxjs';
 import { ConfirmationDialogComponent } from '../shared/confirmation-dialog/confirmation-dialog.component';
 
 @Injectable()
@@ -13,6 +13,6 @@ export class DialogService {
         ConfirmationDialogComponent
       );
 
-    return dialogRef.afterClosed();
+    return dialogRef.afterClosed().pipe(map((result) => !!result));
   }
 }

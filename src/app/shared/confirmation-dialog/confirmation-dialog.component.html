@@ -4,12 +4,12 @@
   <button
     mat-button
     mat-raised-button
-    (click)="return(false)"
+    [mat-dialog-close]="false"
   >Cancel</button>
   <button
     mat-button
     mat-raised-button
     color="primary"
-    (click)="return(true)"
+    [mat-dialog-close]="true"
   >Quit</button>
 </div>
